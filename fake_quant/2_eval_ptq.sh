@@ -6,11 +6,12 @@
 # LICENSE file in the root directory of this source tree.
 
 ### k_groupsize, v_groupsize = 64 only for Llama-3.2-1B else 128
-torchrun --nnodes=1 --nproc_per_node=1 --master_port=24552 ptq.py \
---input_model meta-llama/Llama-2-7B-hf \
+#### Storing config for 70B model
+torchrun --nnodes=1 --nproc_per_node=1 --master_port=24551 ptq.py \
+--input_model meta-llama/Llama-3.2-3B \
 --do_train False \
 --do_eval True \
---per_device_eval_batch_size 16 \
+--per_device_eval_batch_size 1 \
 --model_max_length 2048 \
 --fp16 False \
 --bf16 True \
@@ -24,13 +25,11 @@ torchrun --nnodes=1 --nproc_per_node=1 --master_port=24552 ptq.py \
 --v_asym \
 --k_groupsize 128 \
 --v_groupsize 128 \
---rotate \
 --residual_fraction 0.125 \
 --rotate_mode "resq" \
---optimized_rotation_path ./rotation/R-high_prec-0.125-sparse-0.125-Llama-2-7B-hf.bin \
---optimized_basis_path ./rotation/U-wikitext-512-Llama-2-7B-hf.bin \
+--optimized_rotation_path ./rotation/R-high_prec-0.125-sparse-0.0-Llama-3.2-3B.bin \
+--optimized_basis_path ./rotation/U-wikitext-512-Llama-3.2-3B.bin \
 --rotation_granularity 'full_shared' \
---tasks "mmlu" \
 --rotate \
 --flash_attn \
-
+--tasks "mmlu" \
